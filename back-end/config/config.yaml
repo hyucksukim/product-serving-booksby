@@ -1,0 +1,22 @@
+model: MultiVAE
+epochs: 3
+top_k: 10
+heldout_users: 600
+intermediate_dim: 200
+latent_dim: 70
+batch_size: 100
+
+seed: 98765
+
+root_dir: "C:\\Users\\dpqls\\SYB\\app"
+weights_name: "mvae_weights.hdf5"
+
+data_name: "book_user_2014_5.parquet"
+
+threshhold: 3.5
+user_min_rating: 50
+item_min_rating: 5
+
+ratio: 0.75
+
+verbose: 1
