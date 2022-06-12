@@ -34,7 +34,7 @@ jobs:
     # Model 파일 복사
     - name: Copy model file
       run: |
-        gsutil cp gs://artifacts.helical-ranger-352017.appspot.com/MacridVAE-cpu_final.pth /
+        gsutil cp gs://artifacts.helical-ranger-352017.appspot.com/MacridVAE-cpu_final.pth Dockerfiles/Backend/app
         
 
     # Docker Image Build
