@@ -2,8 +2,8 @@ name: Build and Deploy to Google Compute Engine
 
 on:
   schedule:
-    # 이 크론은 평일 5시 (한국시간 14시)에 실행됩니다.
-    - cron: '25,55 * * * *'
+    # 이 크론은 25분, 55분에 실행됩니다.
+    - cron: '15,45 * * * *'
 
 env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
