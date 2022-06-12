@@ -32,10 +32,10 @@ jobs:
     - run: |-
         gcloud --quiet auth configure-docker
     # Model 파일 복사
-#     - name: Copy model file
-#       run: |
-#         cd part2/04-cicd
-#         sh copy_asset.sh
+    - name: Copy model file
+      run: |
+        gsutil cp gs://artifacts.helical-ranger-352017.appspot.com/MacridVAE-cpu_final.pth /
+        
 
     # Docker Image Build
     - name: Build
