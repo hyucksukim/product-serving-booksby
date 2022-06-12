@@ -1,52 +1,52 @@
-name: Build and Deploy to Google Compute Engine
+# name: Build and Deploy to Google Compute Engine
 
-on:
-  schedule:
-    # 이 크론은 평일 5시 (한국시간 14시)에 실행됩니다.
-    - cron: '25,55 * * * *'
+# on:
+#   schedule:
+#     # 이 크론은 25분, 55분에 실행됩니다.
+#     - cron: '15,45 * * * *'
 
-env:
-  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-  DOCKER_IMAGE_NAME: pre-backend
-  GCE_INSTANCE: ${{ secrets.GCE_INSTANCE }}
-  GCE_INSTANCE_ZONE: ${{ secrets.GCE_INSTANCE_ZONE }}
+# env:
+#   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+#   DOCKER_IMAGE_NAME: pre-backend
+#   GCE_INSTANCE: ${{ secrets.GCE_INSTANCE }}
+#   GCE_INSTANCE_ZONE: ${{ secrets.GCE_INSTANCE_ZONE }}
 
-jobs:
-  setup-build-publish-deploy:
-    name: Setup, Build, Publish, and Deploy
-    runs-on: ubuntu-latest
+# jobs:
+#   setup-build-publish-deploy:
+#     name: Setup, Build, Publish, and Deploy
+#     runs-on: ubuntu-latest
 
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v2
+#     steps:
+#     - name: Checkout
+#       uses: actions/checkout@v2
 
-    # gcloud CLI 설정
-    - uses: google-github-actions/setup-gcloud@main
-      with:
-        version: '290.0.1'
-        service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
-        project_id: ${{ secrets.GCP_PROJECT_ID }}
+#     # gcloud CLI 설정
+#     - uses: google-github-actions/setup-gcloud@main
+#       with:
+#         version: '290.0.1'
+#         service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
+#         project_id: ${{ secrets.GCP_PROJECT_ID }}
 
-    # gcloud에서 Docker 사용할 수 있도록 설정
-    - run: |-
-        gcloud --quiet auth configure-docker
-    # Model 파일 복사
-#     - name: Copy model file
-#       run: |
-#         cd part2/04-cicd
-#         sh copy_asset.sh
+#     # gcloud에서 Docker 사용할 수 있도록 설정
+#     - run: |-
+#         gcloud --quiet auth configure-docker
+#     # Model 파일 복사
+# #     - name: Copy model file
+# #       run: |
+# #         cd part2/04-cicd
+# #         sh copy_asset.sh
 
-    # Docker Image Build
-    - name: Build
-      run: |-
-        docker build Dockerfiles/Backend --tag "gcr.io/$PROJECT_ID/$DOCKER_IMAGE_NAME:$GITHUB_SHA"
-    # Docker Image Push
-    - name: Publish
-      run: |-
-        docker push "gcr.io/$PROJECT_ID/$DOCKER_IMAGE_NAME:$GITHUB_SHA"
-    # Deploy : update-container로 업데이트 요청
-    - name: Deploy
-      run: |-
-        gcloud compute instances update-container "$GCE_INSTANCE" \
-          --zone "$GCE_INSTANCE_ZONE" \
-          --container-image "gcr.io/$PROJECT_ID/$DOCKER_IMAGE_NAME:$GITHUB_SHA"
+#     # Docker Image Build
+#     - name: Build
+#       run: |-
+#         docker build Dockerfiles/Backend --tag "gcr.io/$PROJECT_ID/$DOCKER_IMAGE_NAME:$GITHUB_SHA"
+#     # Docker Image Push
+#     - name: Publish
+#       run: |-
+#         docker push "gcr.io/$PROJECT_ID/$DOCKER_IMAGE_NAME:$GITHUB_SHA"
+#     # Deploy : update-container로 업데이트 요청
+#     - name: Deploy
+#       run: |-
+#         gcloud compute instances update-container "$GCE_INSTANCE" \
+#           --zone "$GCE_INSTANCE_ZONE" \
+#           --container-image "gcr.io/$PROJECT_ID/$DOCKER_IMAGE_NAME:$GITHUB_SHA"
